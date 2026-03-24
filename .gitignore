@@ -1,0 +1,25 @@
+# swstack .gitignore
+
+# 사례 데이터 (개인정보 포함 — 절대 커밋 금지)
+.swstack/cases/
+.swstack/resources/
+
+# 기관 설정 (기관별 민감정보)
+.swstack/config.md
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node
+node_modules/
+dist/
+*.log
