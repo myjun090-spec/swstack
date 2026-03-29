@@ -50,9 +50,12 @@ Claude Code를 사회복지 실천 현장의 가상 팀으로 전환합니다.
 - `/supervise` — 사례 슈퍼비전, 윤리 딜레마 분석
 - `/retro-welfare` — 월간/분기 사업 회고
 
+### 법령 조사 (국가법령정보 MCP)
+- `/law-check` — 국가법령정보 MCP 기반 법령/윤리 실시간 검토 (search_law, get_three_tier, get_annexes, search_precedent, search_interpretation 등)
+- `/law-research` — 복지 법령 심층 조사 보고서 (chain_full_research, get_three_tier, search_ordinance 조합)
+
 ### 유틸리티
 - `/privacy-guard` — 개인정보 마스킹, 동의서 확인
-- `/law-check` — 관련 법령 검토
 - `/template` — 기관 양식 관리
 - `/resource-map` — 지역사회 자원 DB
 
@@ -83,7 +86,8 @@ Claude Code를 사회복지 실천 현장의 가상 팀으로 전환합니다.
 │   ├── conferences/                  ← /auto-report 사례회의록
 │   ├── government/                   ← /auto-report 정부보고서
 │   ├── proposals/                    ← /auto-report 사업계획서
-│   └── settlement/                   ← /auto-report 결산보고서
+│   ├── settlement/                   ← /auto-report 결산보고서
+│   └── law-research/                 ← /law-research 법령 조사 보고서
 ├── reviews/                          ← /doc-review 검토 결과
 ├── budgets/
 └── pr/
