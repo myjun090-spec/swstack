@@ -21,6 +21,16 @@ Claude Code를 사회복지 실천 현장의 가상 팀으로 전환합니다.
 - `/evaluate` — 사전-사후 비교, 목표달성 척도, 종결/연장 판단
 - `/close-case` — 종결 요약서, 사후관리 계획
 
+### 지식그래프 (Knowledge Graph)
+- `/knowledge-index` — 사례 문서에서 엔티티/관계 추출, 구조화된 지식 베이스 색인
+- `/knowledge-query` — 축적된 사례 지식 검색, 유사 사례 탐색, 성과 분석 (RAG)
+- `/auto-report` — 지식 베이스 기반 자동 보고서 생성 (주간보고, 회의록, 정부보고서, 사업계획서, 결산)
+- `/doc-review` — 7단계 다각도 문서 검토 (정확성, 근거, 구조, 문법, 일관성, 전문성, 법적적합성)
+
+### 멀티에이전트 파이프라인 (Multi-Agent Pipeline)
+- `/case-pipeline` — 접수→사정→계획→평가 전체 워크플로를 4개 에이전트가 순차 처리
+- `/parallel-review` — 법률/심리/자원/위기 4개 에이전트가 병렬로 사례 검토 후 통합 보고
+
 ### 회계 (Accounting)
 - `/budget` — 사업별 예산 편성/수정
 - `/expense` — 지출 증빙 검토, 정산서 생성
@@ -60,8 +70,21 @@ Claude Code를 사회복지 실천 현장의 가상 팀으로 전환합니다.
 │       ├── notes/
 │       ├── conferences/
 │       ├── evaluation.md
-│       └── closing.md
+│       ├── closing.md
+│       ├── pipeline-log.md          ← /case-pipeline 실행 로그
+│       └── parallel-review-{date}.md ← /parallel-review 결과
+├── knowledge/                        ← 지식그래프 데이터
+│   ├── catalog.json                  ← 전체 색인 카탈로그
+│   ├── index/
+│   │   └── {case-id}-index.json      ← 사례별 엔티티/관계 색인
+│   └── queries/                      ← 검색 로그 (선택)
 ├── reports/
+│   ├── weekly/                       ← /auto-report 주간업무보고서
+│   ├── conferences/                  ← /auto-report 사례회의록
+│   ├── government/                   ← /auto-report 정부보고서
+│   ├── proposals/                    ← /auto-report 사업계획서
+│   └── settlement/                   ← /auto-report 결산보고서
+├── reviews/                          ← /doc-review 검토 결과
 ├── budgets/
 └── pr/
 ```
@@ -74,6 +97,17 @@ Claude Code를 사회복지 실천 현장의 가상 팀으로 전환합니다.
 /intake → /assessment → /plan-case → /intervene(반복) → /evaluate → /close-case
                                           ↑
                                    /case-conference
+
+/case-pipeline: 위 전체 흐름을 단일 파이프라인으로 자동 실행
+/parallel-review: 법률/심리/자원/위기 4개 에이전트가 병렬 검토
+```
+
+지식그래프 스킬은 사례관리 전체에 걸쳐 활용됩니다:
+
+```
+[모든 산출물] → /knowledge-index → /knowledge-query (검색)
+                                 → /auto-report (보고서 생성)
+                                 → /doc-review (문서 검토)
 ```
 
 ## 프로젝트 설정
