@@ -82,6 +82,8 @@
 
 ## 설치
 
+### Claude Code (기본)
+
 ```bash
 git clone https://github.com/myjun090-spec/swstack.git ~/.claude/skills/swstack
 ```
@@ -91,6 +93,70 @@ git clone https://github.com/myjun090-spec/swstack.git ~/.claude/skills/swstack
 ```bash
 git clone https://github.com/myjun090-spec/swstack.git .claude/skills/swstack
 ```
+
+### hermes-agent 연동
+
+[hermes-agent](https://github.com/NousResearch/hermes-agent)(MIT)를 통해 CLI, Discord, Slack, Telegram 등 다양한 게이트웨이에서 swstack 스킬을 사용할 수 있습니다.
+
+#### 1. hermes-agent 설치
+
+```bash
+pip install hermes-agent
+# 또는
+uv tool install hermes-agent
+```
+
+#### 2. swstack 레포 clone
+
+```bash
+git clone https://github.com/myjun090-spec/swstack.git ~/개발/swstack
+```
+
+#### 3. 설정 파일 준비
+
+```bash
+# 설정 파일 복사
+cp hermes/config.yaml ~/.hermes/cli-config.yaml
+
+# 환경변수 파일 준비
+cp hermes/.env.example hermes/.env
+# hermes/.env 를 열어 API 키 입력
+```
+
+#### 4. hermes 실행
+
+```bash
+# CLI 모드 (터미널에서 직접 대화)
+hermes
+
+# 스킬 목록 확인 (swstack 스킬 29개가 보이면 성공)
+hermes skills list
+```
+
+#### 5. 스킬 사용 예시
+
+hermes CLI에서 스킬 이름으로 호출합니다:
+
+```
+> intake 사용해줘
+→ 접수상담 워크플로 시작
+
+> assessment 실행
+→ 직전 intake 결과를 자동 참조하여 욕구사정 진행
+
+> law-check 아동학대 의심 신고의무
+→ 국가법령정보 MCP로 실시간 법령 조회
+```
+
+#### Discord / Slack 게이트웨이
+
+`hermes/.env`에 봇 토큰을 추가하고 `~/.hermes/cli-config.yaml`의 게이트웨이 섹션 주석을 해제합니다. 자세한 설정은 [hermes-agent 공식 문서](https://github.com/NousResearch/hermes-agent)를 참고하세요.
+
+#### 주의사항
+
+- `hermes/.env` 파일은 `.gitignore`에 포함되어 있어 커밋되지 않습니다
+- 스킬 파일(각 디렉토리의 `SKILL.md`)은 수정하지 않습니다 — hermes가 읽기 전용으로 참조합니다
+- 사례 산출물(`.swstack/` 디렉토리)도 `.gitignore`에 포함되어 있습니다
 
 ## 사용법
 

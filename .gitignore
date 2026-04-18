@@ -23,3 +23,7 @@ desktop.ini
 node_modules/
 dist/
 *.log
+
+# hermes-agent (환경변수 파일 — 절대 커밋 금지)
+hermes/.env
+hermes/cli-config.yaml

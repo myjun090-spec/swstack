@@ -1,0 +1,101 @@
+# swstack × hermes-agent 연동 설정
+# 복사하여 사용: cp hermes/config.yaml ~/.hermes/cli-config.yaml
+#
+# hermes-agent 설치: pip install hermes-agent
+# 공식 문서: https://github.com/NousResearch/hermes-agent
+
+# =============================================================================
+# LLM 설정
+# =============================================================================
+model:
+  # 기본 모델 — OpenRouter 무료 모델 또는 원하는 모델로 교체
+  default: "google/gemini-2.0-flash-exp:free"
+
+  # 추론 공급자
+  # "auto"     — 환경변수에서 자동 감지 (OPENROUTER_API_KEY, GROQ_API_KEY 등)
+  # "openrouter" — OpenRouter (OPENROUTER_API_KEY 필요)
+  # "groq"     — Groq (GROQ_API_KEY 필요, 무료 티어 있음)
+  # "gemini"   — Google AI Studio (GOOGLE_API_KEY 필요, 무료 티어 있음)
+  # "custom"   — OpenAI 호환 로컬 서버 (apfel, Ollama, LM Studio 등)
+  provider: "auto"
+
+  base_url: "https://openrouter.ai/api/v1"
+
+  # 로컬 서버(apfel) 사용 시 아래 주석 해제:
+  # provider: "custom"
+  # base_url: "http://localhost:11434/v1"
+  # default: "apple/foundation-models"
+
+# =============================================================================
+# swstack 스킬 연동 — 핵심 설정
+# =============================================================================
+skills:
+  # swstack 스킬 디렉토리를 hermes가 읽을 수 있도록 외부 경로로 등록
+  # 기존 스킬 파일을 수정하지 않고 읽기 전용으로 연결합니다
+  external_dirs:
+    - ~/개발/swstack          # swstack 레포 루트 (29개 스킬 폴더 전체 포함)
+
+  # 새 스킬 자동 생성 주기 (N번 도구 호출마다 스킬 저장 권유)
+  # 0으로 설정하면 비활성화
+  creation_nudge_interval: 0   # swstack은 기존 스킬을 그대로 사용
+
+# =============================================================================
+# 에이전트 페르소나 (사회복지 실천 특화)
+# =============================================================================
+system_prompt: |
+  당신은 사회복지 실천 현장을 지원하는 AI 에이전트입니다.
+  swstack 스킬 시스템을 활용하여 사례관리, 보고서 작성, 법령 조사 등
+  사회복지 업무를 돕습니다.
+
+  핵심 원칙:
+  - 클라이언트 중심: AI는 판단을 대신하지 않으며 실천가의 전문적 판단을 보조합니다
+  - 개인정보 보호: 실명/주민번호/주소는 자동 마스킹, 비식별 정보만 기록
+  - 근거기반 실천: 개입 방법 선택 시 근거 수준을 명시합니다
+  - 강점관점: 문제보다 강점과 자원에 초점을 맞춥니다
+  - AI의 한계 인지: 위기 상황 감지 시 즉시 실천가에게 알립니다
+
+  사용 가능한 스킬: intake, assessment, plan-case, intervene, case-conference,
+  evaluate, close-case, knowledge-index, knowledge-query, auto-report, doc-review,
+  case-pipeline, parallel-review, budget, expense, audit-prep, pr-content,
+  pr-report, event-plan, report-gov, proposal, minutes, supervise, retro-welfare,
+  law-check, law-research, privacy-guard, template, resource-map
+
+# =============================================================================
+# Discord 게이트웨이 설정 (선택 사항)
+# =============================================================================
+# Discord 봇으로 swstack을 운영할 때 사용합니다.
+# DISCORD_TOKEN 환경변수를 .env 파일에 설정해야 합니다.
+#
+# gateway:
+#   discord:
+#     enabled: true
+#     # 허용할 채널 ID 목록 (비어있으면 모든 채널 허용)
+#     allowed_channels: []
+#     # 허용할 역할 ID 목록 (비어있으면 모든 역할 허용)
+#     allowed_roles: []
+
+# =============================================================================
+# Slack 게이트웨이 설정 (선택 사항)
+# =============================================================================
+# Slack 봇으로 swstack을 운영할 때 사용합니다.
+# SLACK_BOT_TOKEN, SLACK_APP_TOKEN 환경변수를 .env 파일에 설정해야 합니다.
+#
+# gateway:
+#   slack:
+#     enabled: true
+
+# =============================================================================
+# 세션 관리
+# =============================================================================
+session_reset:
+  mode: idle             # 비활성 시 세션 초기화
+  idle_minutes: 120      # 2시간 비활성 후 초기화 (사례 정보 보호)
+
+# 그룹 채널에서 사용자별 독립 세션 유지 (기본값 유지)
+group_sessions_per_user: true
+
+# =============================================================================
+# 로깅
+# =============================================================================
+verbose: false
+reasoning_effort: "medium"
